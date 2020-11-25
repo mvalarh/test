@@ -35,4 +35,4 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
           uname -a
-          podman --version
+          podman pull centos:8
