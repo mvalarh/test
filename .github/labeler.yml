@@ -1,7 +1,6 @@
 # Add 'repo' label to any root file changes
 repo:
   - ./*
-
-@mvala/core:
-  - mvala/*
-  - package/mvala/**/*
+  
+label1:
+  - example/**/*
