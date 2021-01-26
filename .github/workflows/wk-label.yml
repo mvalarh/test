@@ -6,9 +6,9 @@ name: label changed
 on:
   pull_request:
     branches: [ main ]
-    types: [opened, synchronize, reopened]
-  pull_request_review:
-    types: [submitted, edited]
+    types: [opened, synchronize, reopened, ready_for_review, review_requested]
+  # pull_request_review:
+  #   types: [submitted, edited]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
