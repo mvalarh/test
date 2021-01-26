@@ -21,4 +21,4 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Running test
-        run: echo "XXX"
+        run: echo "${{ github.event.action }}"
