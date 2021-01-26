@@ -27,4 +27,4 @@ jobs:
       - run: ls -al ./.github/workflows/
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      # - uses: ./.github/workflows/test.yml
+      - uses: ./.github/workflows/test.yml
