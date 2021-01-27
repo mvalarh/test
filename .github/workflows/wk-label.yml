@@ -6,14 +6,15 @@ name: label changed
 on:
   pull_request:
     branches: [ main ]
-    types: [opened, synchronize, reopened]
-  pull_request_review:
-    types: [submitted, edited]
+    types: [opened, synchronize, reopened, ready_for_review]
+  # pull_request_review:
+  #   types: [submitted, edited]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
   build:
+    if: github.event.pull_request.draft == false
     # The type of runner that the job will run on
     runs-on: self-hosted
 
@@ -21,4 +22,5 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Running test
-        run: echo "XXX"
+        run: echo "${{ github.event.action }}"
+
