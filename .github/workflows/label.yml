@@ -5,9 +5,9 @@
 # file with configuration.  For more information, see:
 # https://github.com/actions/labeler
 
-name: Main test
+name: Labeler
 on:
- push:
+ pull_request:
    branches:
      - main
 
@@ -15,9 +15,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Main
-        id: main
-        env:
-          OP_TEST_LABELS: "${{ join(github.event.pull_request.labels.*.name, ' ') }}"
-        run: |
-          echo "global labels $OP_TEST_LABELS"
+    - uses: actions/labeler@v2
+      with:
+        repo-token: "${{ secrets.GITHUB_TOKEN }}"
