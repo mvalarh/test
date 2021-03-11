@@ -12,10 +12,8 @@ on:
      - main
 
 jobs:
-  label:
-
+  test:
     runs-on: ununtu-latest
-
     steps:
     - uses: actions/labeler@v2
       with:
