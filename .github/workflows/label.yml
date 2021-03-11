@@ -31,4 +31,4 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         commands: |
-          ok-to-test
+          commands
