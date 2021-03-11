@@ -1,6 +1,5 @@
-# Add 'repo' label to any root file changes
-repo:
-  - ./*
-  
-label1:
-  - example/**/*
+kubernetes-operator:
+  - upstream-community-operators/*
+
+openshift-operator:
+  - community-operators/*

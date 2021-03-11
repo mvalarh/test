@@ -20,4 +20,4 @@ jobs:
         env:
           OP_TEST_LABELS: "${{ join(github.event.pull_request.labels.*.name, ' ') }}"
         run: |
-          echo "global labels $OP_TEST_LABELS"
+          echo "PR labels : $OP_TEST_LABELS"
