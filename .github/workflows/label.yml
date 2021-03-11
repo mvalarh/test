@@ -8,8 +8,6 @@
 name: Labeler
 on:
  pull_request_target:
-   branches:
-     - main
 
 jobs:
   test:
