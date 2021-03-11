@@ -5,13 +5,16 @@
 # file with configuration.  For more information, see:
 # https://github.com/actions/labeler
 
-name: Labeler
-# on: [pull_request]
+name: Main test
+on:
+ push:
+   branches:
+     - main
 
 jobs:
   label:
 
-    runs-on: self-hosted
+    runs-on: ununtu-latest
 
     steps:
     - uses: actions/labeler@v2
