@@ -24,6 +24,20 @@ jobs:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
         allow-repeats: true # This is the default
+    - uses: mshick/add-pr-comment@v1
+      with:
+        message: |
+          /draft
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
+        allow-repeats: true # This is the default
+    - uses: mshick/add-pr-comment@v1
+      with:
+        message: |
+          /ready-for-review
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
+        allow-repeats: true # This is the default
     # - name: Slash Command Dispatch
     #   uses: peter-evans/slash-command-dispatch@v2
     #   with:
