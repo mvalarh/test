@@ -5,7 +5,7 @@
 # file with configuration.  For more information, see:
 # https://github.com/actions/labeler
 
-name: Labeler
+name: PR target
 on:
  pull_request_target:
    types: [opened, synchronize, reopened, ready_for_review]
@@ -20,9 +20,7 @@ jobs:
     - uses: mshick/add-pr-comment@v1
       with:
         message: |
-          **Hello**
-          🌏
-          !
+          Simple PR target
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
         allow-repeats: false # This is the default
