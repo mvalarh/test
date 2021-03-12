@@ -31,13 +31,16 @@ jobs:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
         allow-repeats: true # This is the default
-    - uses: mshick/add-pr-comment@v1
+    - uses: actions/github-script@v3
       with:
-        message: |
-          /ready-for-review
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
-        allow-repeats: true # This is the default
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '👋 Thanks for reporting!'
+          })
     # - name: Slash Command Dispatch
     #   uses: peter-evans/slash-command-dispatch@v2
     #   with:
