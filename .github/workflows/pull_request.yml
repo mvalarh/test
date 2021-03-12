@@ -84,7 +84,7 @@ jobs:
       uses: actions/github-script@v3
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
-        script: console.log(context)
+        script: console.log(github.issues)
     # - name: Slash Command Dispatch
     #   uses: peter-evans/slash-command-dispatch@v2
     #   with:
