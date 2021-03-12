@@ -80,6 +80,10 @@ jobs:
             repo: context.repo.repo,
             body: 'Welcome, new contributor!'
           })  
+    - name: View context attributes
+      uses: actions/github-script@v3
+      with:
+      script: console.log(context)
     # - name: Slash Command Dispatch
     #   uses: peter-evans/slash-command-dispatch@v2
     #   with:
