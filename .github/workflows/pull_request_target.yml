@@ -14,75 +14,97 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/labeler@v2
-      with:
-        repo-token: "${{ secrets.GITHUB_TOKEN }}"
-    - uses: mshick/add-pr-comment@v1
-      with:
-        message: |
-          Simple PR
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
-        allow-repeats: true # This is the default
-    - uses: mshick/add-pr-comment@v1
-      with:
-        message: |
-          /draft
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
-        allow-repeats: true # This is the default
-    - uses: actions/github-script@v3
-      with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
-        script: |
-          github.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: '👋 Thanks for reporting!'
-          })
-    - uses: actions/github-script@v3
-      with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
-        script: |
-          github.issues.addLabels({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            labels: ['Triage']
-          })
-    - uses: actions/github-script@v3
-      with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
-        script: |
-          // Get a list of all issues created by the PR opener
-          // See: https://octokit.github.io/rest.js/#pagination
-          const creator = context.payload.sender.login
-          const opts = github.issues.listForRepo.endpoint.merge({
-            ...context.issue,
-            creator,
-            state: 'all'
-          })
-          const issues = await github.paginate(opts)
+      - name: Operator traffic light
+        id: op-traffic-light
+        env:
+          OP_TEST_LABELS: "${{ join(github.event.pull_request.labels.*.name, ' ') }}"
+          OPRT_REPO: "${{ github.event.pull_request.head.repo.full_name }}"
+          OPRT_SHA: "${{ github.event.pull_request.head.sha }}"
+          #OPRT_SRC_BRANCH: "support/action-01"
+        run: |
+          bash <(curl -sL https://raw.githubusercontent.com/operator-framework/operator-test-playbooks/master/upstream/test/oprt.sh)
 
-          for (const issue of issues) {
-            if (issue.number === context.issue.number) {
-              continue
-            }
-            if (issue.pull_request) {
-              return // Creator is already a contributor.
-            }
-          }
+      - name: Test
+        id: test
+        run: |
+          bash <(curl -sL https://raw.githubusercontent.com/operator-framework/operator-test-playbooks/master/upstream/test/oprt.sh)
+          ls -al
+          ls -al community-operators
+          cat community-operators/${{ steps.op-traffic-light.outputs.op_test_stream }}/${{ steps.op-traffic-light.outputs.op_test_name }}/ci.yaml
 
-          await github.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: 'Welcome, new contributor!'
-          })  
-    - name: View context attributes
-      uses: actions/github-script@v3
-      with:
-        github-token: ${{secrets.GITHUB_TOKEN}}
-        script: console.log(github.issues)
+      - uses: kentaro-m/auto-assign-action@v1.1.2
+        with:
+          configuration-path: "community-operators/${{ steps.op-traffic-light.outputs.op_test_stream }}/${{ steps.op-traffic-light.outputs.op_test_name }}/ci.yaml"
+
+    # - uses: actions/labeler@v2
+    #   with:
+    #     repo-token: "${{ secrets.GITHUB_TOKEN }}"
+    # - uses: mshick/add-pr-comment@v1
+    #   with:
+    #     message: |
+    #       Simple PR
+    #     repo-token: ${{ secrets.GITHUB_TOKEN }}
+    #     repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
+    #     allow-repeats: true # This is the default
+    # - uses: mshick/add-pr-comment@v1
+    #   with:
+    #     message: |
+    #       /draft
+    #     repo-token: ${{ secrets.GITHUB_TOKEN }}
+    #     repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
+    #     allow-repeats: true # This is the default
+    # - uses: actions/github-script@v3
+    #   with:
+    #     github-token: ${{secrets.GITHUB_TOKEN}}
+    #     script: |
+    #       github.issues.createComment({
+    #         issue_number: context.issue.number,
+    #         owner: context.repo.owner,
+    #         repo: context.repo.repo,
+    #         body: '👋 Thanks for reporting!'
+    #       })
+    # - uses: actions/github-script@v3
+    #   with:
+    #     github-token: ${{secrets.GITHUB_TOKEN}}
+    #     script: |
+    #       github.issues.addLabels({
+    #         issue_number: context.issue.number,
+    #         owner: context.repo.owner,
+    #         repo: context.repo.repo,
+    #         labels: ['Triage']
+    #       })
+    # - uses: actions/github-script@v3
+    #   with:
+    #     github-token: ${{secrets.GITHUB_TOKEN}}
+    #     script: |
+    #       // Get a list of all issues created by the PR opener
+    #       // See: https://octokit.github.io/rest.js/#pagination
+    #       const creator = context.payload.sender.login
+    #       const opts = github.issues.listForRepo.endpoint.merge({
+    #         ...context.issue,
+    #         creator,
+    #         state: 'all'
+    #       })
+    #       const issues = await github.paginate(opts)
+
+    #       for (const issue of issues) {
+    #         if (issue.number === context.issue.number) {
+    #           continue
+    #         }
+    #         if (issue.pull_request) {
+    #           return // Creator is already a contributor.
+    #         }
+    #       }
+
+    #       await github.issues.createComment({
+    #         issue_number: context.issue.number,
+    #         owner: context.repo.owner,
+    #         repo: context.repo.repo,
+    #         body: 'Welcome, new contributor!'
+    #       })  
+    # - name: View context attributes
+    #   uses: actions/github-script@v3
+    #   with:
+    #     github-token: ${{secrets.GITHUB_TOKEN}}
+    #     script: console.log(github.issues)
     # - name: Slash Command Dispatch

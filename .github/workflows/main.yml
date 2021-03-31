@@ -21,10 +21,4 @@ jobs:
           OP_TEST_LABELS: "${{ join(github.event.pull_request.labels.*.name, ' ') }}"
         run: |
           echo "PR labels : $OP_TEST_LABELS"
-      - uses: mshick/add-pr-comment@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          message: |
-            **Hello MASTER**
-          allow-repeats: true
+          echo "repo name: ${{ github.event.pull_request.head.repo.full_name }}"
