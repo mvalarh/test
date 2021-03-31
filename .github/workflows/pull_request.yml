@@ -14,10 +14,27 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      # - name: Test
+      #   id: test
+      #   env:
+      #     OP_TEST_LABELS: "${{ join(github.event.pull_request.labels.*.name, ' ') }}"
+      #   run: |
+      #     echo "PR labels : $OP_TEST_LABELS"
+      #     echo "repo name: ${{ github.event.pull_request.head.repo.full_name }}"
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Operator traffic light
+        id: op-traffic-light
+        run: |
+          # git clone https://github.com/operator-framework/community-operators.git
+          echo "::set-output name=op_test_stream::upstream-community-operators"
+          echo "::set-output name=op_test_name::aqua"
+
       - name: Test
         id: test
-        env:
-          OP_TEST_LABELS: "${{ join(github.event.pull_request.labels.*.name, ' ') }}"
         run: |
-          echo "PR labels : $OP_TEST_LABELS"
-          echo "repo name: ${{ github.event.pull_request.head.repo.full_name }}"
+          cat ${{ steps.op-traffic-light.outputs.op_test_stream }}/${{ steps.op-traffic-light.outputs.op_test_name }}/ci.yaml
+
+      - uses: kentaro-m/auto-assign-action@v1.1.2
+        with:
+          configuration-path: "${{ steps.op-traffic-light.outputs.op_test_stream }}/${{ steps.op-traffic-light.outputs.op_test_name }}/ci.yaml"
