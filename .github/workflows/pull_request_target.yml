@@ -16,13 +16,11 @@ jobs:
     steps:
       - name: Operator traffic light
         id: op-traffic-light
-        env:
-          OP_TEST_LABELS: "${{ join(github.event.pull_request.labels.*.name, ' ') }}"
-          OPRT_REPO: "${{ github.event.pull_request.head.repo.full_name }}"
-          OPRT_SHA: "${{ github.event.pull_request.head.sha }}"
-          #OPRT_SRC_BRANCH: "support/action-01"
         run: |
-          bash <(curl -sL https://raw.githubusercontent.com/operator-framework/operator-test-playbooks/master/upstream/test/oprt.sh)
+          echo "::set-output name=op_test_repo_branch::op_test_stream=community-operators"
+          echo "::set-output name=op_test_repo_branch::op_test_name=aqua"
+
+          
 
       - name: Test
         id: test
