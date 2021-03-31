@@ -20,8 +20,8 @@ jobs:
         id: op-traffic-light
         run: |
           # git clone https://github.com/operator-framework/community-operators.git
-          echo "::set-output name=op_test_repo_branch::op_test_stream=community-operators"
-          echo "::set-output name=op_test_repo_branch::op_test_name=aqua"
+          echo "::set-output name=op_test_stream::community-operators"
+          echo "::set-output name=op_test_name::aqua"
 
       - name: Test
         id: test
