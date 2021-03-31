@@ -20,15 +20,12 @@ jobs:
         id: op-traffic-light
         run: |
           # git clone https://github.com/operator-framework/community-operators.git
-          echo "::set-output name=op_test_stream::community-operators"
+          echo "::set-output name=op_test_stream::upstream-community-operators"
           echo "::set-output name=op_test_name::aqua"
 
       - name: Test
         id: test
         run: |
-          
-          ls -al
-          ls -al community-operators
           cat ${{ steps.op-traffic-light.outputs.op_test_stream }}/${{ steps.op-traffic-light.outputs.op_test_name }}/ci.yaml
 
       - uses: kentaro-m/auto-assign-action@v1.1.2
