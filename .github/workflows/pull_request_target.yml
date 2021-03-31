@@ -26,14 +26,14 @@ jobs:
       - name: Test
         id: test
         run: |
-          bash <(curl -sL https://raw.githubusercontent.com/operator-framework/operator-test-playbooks/master/upstream/test/oprt.sh)
+          
           ls -al
           ls -al community-operators
-          cat community-operators/${{ steps.op-traffic-light.outputs.op_test_stream }}/${{ steps.op-traffic-light.outputs.op_test_name }}/ci.yaml
+          cat ${{ steps.op-traffic-light.outputs.op_test_stream }}/${{ steps.op-traffic-light.outputs.op_test_name }}/ci.yaml
 
       - uses: kentaro-m/auto-assign-action@v1.1.2
         with:
-          configuration-path: "community-operators/${{ steps.op-traffic-light.outputs.op_test_stream }}/${{ steps.op-traffic-light.outputs.op_test_name }}/ci.yaml"
+          configuration-path: "${{ steps.op-traffic-light.outputs.op_test_stream }}/${{ steps.op-traffic-light.outputs.op_test_name }}/ci.yaml"
 
     # - uses: actions/labeler@v2
     #   with:
