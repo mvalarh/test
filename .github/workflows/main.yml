@@ -30,4 +30,4 @@ jobs:
           echo "PR labels : $OP_TEST_LABELS"
           echo "repo name: ${{ github.event.pull_request.head.repo.full_name }}"
           yq --version
-          [ yq --version &> /dev/null ] || { echo "Command 'yq' could not be found !!!"; exit 1; } 
+          yq --version || { echo "Command 'yq' could not be found !!!"; exit 1; } 
