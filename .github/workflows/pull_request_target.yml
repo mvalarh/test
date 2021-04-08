@@ -21,7 +21,15 @@ jobs:
         run: |
           echo "::set-output name=op_test_stream::upstream-community-operators"
           echo "::set-output name=op_test_name::aqua"
-
+          exit 2
+      - name: Is aqua
+        if: always() && op-traffic-light.outputs.op_test_name == 'aqua'
+        run: |
+          echo "Aqua"
+      - name: Is not aqua
+        if: always() && op-traffic-light.outputs.op_test_name != 'aqua'
+        run: |
+          echo "Not Aqua"
       # - name: Test
       #   id: test
       #   run: |
