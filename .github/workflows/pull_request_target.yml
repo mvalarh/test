@@ -35,7 +35,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.issue.number,
-              reviewers: [ "mvalahtv", J0zi ]
+              reviewers: [ "mvalahtv", "J0zi" ]
             });
       # - name: Operator traffic light
       #   id: op-traffic-light
