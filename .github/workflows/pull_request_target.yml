@@ -22,7 +22,7 @@ jobs:
         run: |
           echo "github.event.issue.user.login: ${{ github.event.issue.user.login }}"
           echo "github.event.pull_request.user.login: ${{ github.event.pull_request.user.login }}"
-          echo "context.payload.sender.login: ${{ context.payload.sender.login }}"
+          # echo "context.payload.sender.login: ${{ context.payload.sender.login }}"
 
 
       # - name: Assign pull requests to Community Operator Submissions project
