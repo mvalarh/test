@@ -17,14 +17,21 @@ jobs:
       # - name: Checkout code
       #   uses: actions/checkout@v2
 
-      - name: Assign pull requests to Community Operator Submissions project
-        uses: srggrs/assign-one-project-github-action@1.2.1
-        if: github.event.action == 'opened' || github.event.action == 'reopened'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        continue-on-error: true
-        with:
-          project: 'https://github.com/operator-framework/community-operators/projects/1'
+      - name: Author
+        id: author
+        run: |
+          echo "github.event.issue.user.login: ${{ github.event.issue.user.login }}"
+          echo "github.event.pull_request.user.login: ${{ github.event.pull_request.user.login }}"
+          echo "context.payload.sender.login: ${{ context.payload.sender.login }}"
+
+      # - name: Assign pull requests to Community Operator Submissions project
+      #   uses: srggrs/assign-one-project-github-action@1.2.1
+      #   if: github.event.action == 'opened' || github.event.action == 'reopened'
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   continue-on-error: true
+      #   with:
+      #     project: 'https://github.com/operator-framework/community-operators/projects/1'
       - name: "Request reviewer (test)"
         uses: actions/github-script@v3
         continue-on-error: true
@@ -37,6 +44,37 @@ jobs:
               pull_number: context.issue.number,
               reviewers: [ "mvalahtv", "J0zi" ]
             });
+
+    - uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+        script: |
+          // Get a list of all issues created by the PR opener
+          // See: https://octokit.github.io/rest.js/#pagination
+          const creator = context.payload.sender.login
+          const opts = github.issues.listForRepo.endpoint.merge({
+            ...context.issue,
+            creator,
+            state: 'all'
+          })
+          const issues = await github.paginate(opts)
+
+          for (const issue of issues) {
+            if (issue.number === context.issue.number) {
+              continue
+            }
+            if (issue.pull_request) {
+              return // Creator is already a contributor.
+            }
+          }
+
+          # await github.issues.createComment({
+          #   issue_number: context.issue.number,
+          #   owner: context.repo.owner,
+          #   repo: context.repo.repo,
+          #   body: 'Welcome, new contributor!'
+          # })  
+
       # - name: Operator traffic light
       #   id: op-traffic-light
       #   run: |
