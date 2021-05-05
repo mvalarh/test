@@ -16,6 +16,9 @@ jobs:
           script: |
             console.log(github);
             console.log(context);
+            console.log(context.workflow_run.head_commit);
+            console.log(context.workflow_run.logs_url);
+            
             
   on-failure:
     runs-on: ubuntu-latest
