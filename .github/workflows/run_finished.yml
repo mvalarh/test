@@ -32,7 +32,7 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             github.issues.addLabels({
-              issue_number: author.outputs.pr,
+              issue_number: steps.author.outputs.pr,
               owner: context.repo.owner,
               repo: context.repo.repo,
               labels: ['Triage']
