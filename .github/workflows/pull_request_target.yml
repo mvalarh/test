@@ -68,12 +68,12 @@ jobs:
               }
             }
 
-            # await github.issues.createComment({
-            #   issue_number: context.issue.number,
-            #   owner: context.repo.owner,
-            #   repo: context.repo.repo,
-            #   body: 'Welcome, new contributor!'
-            # })  
+            await github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Welcome, new contributor!'
+            })  
 
       # - name: Operator traffic light
       #   id: op-traffic-light
