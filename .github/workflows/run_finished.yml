@@ -22,7 +22,7 @@ jobs:
         id: author
         run: |
           echo " github.event.workflow_run.logs_url: ${{ github.event.workflow_run.logs_url }}"
-          curl --header "Authorization: token ${{secrets.GITHUB_TOKEN}}" ${{ github.event.workflow_run.logs_url }}
+          curl -L --header "Authorization: token ${{secrets.GITHUB_TOKEN}}" ${{ github.event.workflow_run.logs_url }}
             
   on-failure:
     runs-on: ubuntu-latest
