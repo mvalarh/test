@@ -22,7 +22,7 @@ jobs:
         id: author
         run: |
           echo " github.event.workflow_run.logs_url: ${{ github.event.workflow_run.logs_url }}"
-          curl -L  -f -u framework-automation:${{secrets.TEST}} -H "Accept: application/vnd.github.v3+json" --header "Content-Type: application/json" ${{ github.event.workflow_run.logs_url }}
+          curl -L --header "Authorization: token ${{secrets.GITHUB_TOKEN}}" -H "Accept: application/vnd.github.v3+json"  --header "Accept: application/vnd.github.everest-preview+json" --header "Content-Type: application/json" ${{ github.event.workflow_run.logs_url }} | base64 -d
             
   on-failure:
     runs-on: ubuntu-latest
