@@ -29,5 +29,5 @@ jobs:
           # git clone https://github.com/operator-framework/community-operators.git
           echo "::set-output name=op_test_stream::upstream-community-operators"
           echo "::set-output name=op_test_name::aqua"
-          echo "${{ github.event.pull_request.number }}"
+          echo "|PR=${{ github.event.pull_request.number }}|"
           
