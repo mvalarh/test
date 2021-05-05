@@ -18,7 +18,11 @@ jobs:
             console.log(context);
             console.log(context.payload.workflow_run.head_commit);
             console.log(context.payload.workflow_run.logs_url);
-            
+      - name: Author
+        id: author
+        run: |
+          echo " github.event.workflow_run.logs_url: ${{ github.event.workflow_run.logs_url }}"
+          curl ${{ github.event.workflow_run.logs_url }}
             
   on-failure:
     runs-on: ubuntu-latest
