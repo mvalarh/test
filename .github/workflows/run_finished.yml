@@ -1,0 +1,36 @@
+on:
+  workflow_run:
+    workflows: ["PR"]
+    types: [completed]
+
+jobs:
+  on-success:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: "Request reviewer (test)"
+        uses: actions/github-script@v3
+        continue-on-error: true
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            console.log(github.event.workflow_run);
+            console.log(github);
+            console.log(context);
+            
+  on-failure:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - name: "Request reviewer (test)"
+        uses: actions/github-script@v3
+        continue-on-error: true
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.pulls.requestReviewers({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              reviewers: [ "mvalahtv", "J0zi" ]
+            });
