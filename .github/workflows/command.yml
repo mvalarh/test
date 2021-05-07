@@ -10,10 +10,23 @@ jobs:
         uses: xt0rted/slash-command-action@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          command: test
+          command: merge
           reaction: "true"
           reaction-type: "eyes"
           allow-edits: "false"
           permission-level: admin
       - name: Act on the command
         run: echo "The command was '${{ steps.command.outputs.command-name }}' with arguments '${{ steps.command.outputs.command-arguments }}'"
+      - name: Merge
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.MERGE}}
+          script: |
+            github.pulls.merge({
+              pull_number: ${{ steps.author.outputs.pr }},
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              merge_method: 'squash',
+              commit_title: 'Title',
+              commit_message: 'Description'
+            })
