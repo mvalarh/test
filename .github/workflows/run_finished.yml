@@ -27,6 +27,7 @@ jobs:
           PR=$(cat test/*Operator*.txt | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g" | grep OP_PR= | tail -n 1| cut -d '=' -f 2)
           echo "::set-output name=pr::${PR}"
 
+
       - uses: actions/github-script@v3
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
@@ -38,19 +39,25 @@ jobs:
               labels: ['Triage']
             })
 
-      - name: Merge
-        uses: actions/github-script@v3
-        with:
-          github-token: ${{secrets.MERGE}}
-          script: |
-            github.pulls.merge({
-              pull_number: ${{ steps.author.outputs.pr }},
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              merge_method: 'squash',
-              commit_title: 'Title',
-              commit_message: 'Description'
-            })
+      # - name: Merge
+      #   uses: actions/github-script@v3
+      #   with:
+      #     github-token: ${{secrets.MERGE}}
+      #     script: |
+      #       github.pulls.merge({
+      #         pull_number: ${{ steps.author.outputs.pr }},
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         merge_method: 'squash',
+      #         commit_title: 'Title',
+      #         commit_message: 'Description',
+      #         sha
+      #       })
+      - name: automerge
+        uses: "pascalgn/automerge-action@v0.13.1"
+        env:
+          GITHUB_TOKEN: "${{ secrets.MERGE }}"
+
 
   on-failure:
     runs-on: ubuntu-latest
