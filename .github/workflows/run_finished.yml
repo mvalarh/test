@@ -39,24 +39,23 @@ jobs:
               labels: ['Triage']
             })
 
-      # - name: Merge
-      #   uses: actions/github-script@v3
-      #   with:
-      #     github-token: ${{secrets.MERGE}}
-      #     script: |
-      #       github.pulls.merge({
-      #         pull_number: ${{ steps.author.outputs.pr }},
-      #         owner: context.repo.owner,
-      #         repo: context.repo.repo,
-      #         merge_method: 'squash',
-      #         commit_title: 'Title',
-      #         commit_message: 'Description',
-      #         sha
-      #       })
-      - name: automerge
-        uses: "pascalgn/automerge-action@v0.13.1"
-        env:
-          GITHUB_TOKEN: "${{ secrets.MERGE }}"
+      - name: Merge
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.MERGE}}
+          script: |
+            github.pulls.merge({
+              pull_number: ${{ steps.author.outputs.pr }},
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              merge_method: 'squash',
+              commit_title: 'Title',
+              commit_message: 'Description'
+            })
+      # - name: automerge
+      #   uses: "pascalgn/automerge-action@v0.13.1"
+      #   env:
+      #     GITHUB_TOKEN: "${{ secrets.MERGE }}"
 
 
   on-failure:
