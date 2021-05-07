@@ -47,7 +47,7 @@ jobs:
               pull_number: ${{ steps.author.outputs.pr }},
               owner: context.repo.owner,
               repo: context.repo.repo,
-              merge_method: squash,
+              merge_method: 'squash',
               commit_title: 'Title',
               commit_message: 'Description'
             })
