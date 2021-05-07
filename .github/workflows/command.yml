@@ -23,7 +23,7 @@ jobs:
           GITHUB_TOKEN: "${{ secrets.MERGE }}"
           MERGE_LABELS: "Triage,!work in progress"
           MERGE_REMOVE_LABELS: "Triage"
-          MERGE_METHOD: "squash"
+          MERGE_METHOD: "merge"
           MERGE_COMMIT_MESSAGE: "pull-request-title"
           MERGE_FORKS: "true"
           MERGE_RETRIES: "6"
