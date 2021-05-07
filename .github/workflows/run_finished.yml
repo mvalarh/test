@@ -39,6 +39,15 @@ jobs:
               labels: ['Triage']
             })
 
+    - uses: mshick/add-pr-comment@v1
+      with:
+        message: |
+          /merge
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
+        allow-repeats: true # This is the default
+
+
       # - name: Merge
       #   uses: actions/github-script@v3
       #   with:
