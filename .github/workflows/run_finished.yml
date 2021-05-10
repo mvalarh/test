@@ -39,13 +39,24 @@ jobs:
               labels: ['Triage']
             })
 
-      - uses: mshick/add-pr-comment@v1
+      - uses: actions/github-script@v3
         with:
-          message: |
-            /merge
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
-          allow-repeats: true # This is the default
+          github-token: ${{secrets.MERGE}}
+          script: |
+            github.issues.createComment({
+              issue_number: ${{ steps.author.outputs.pr }},
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '/merge'
+            })
+
+      # - uses: mshick/add-pr-comment@v1
+      #   with:
+      #     message: |
+      #       /merge
+      #     repo-token: ${{ secrets.GITHUB_TOKEN }}
+      #     repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
+      #     allow-repeats: true # This is the default
 
 
       # - name: Merge
