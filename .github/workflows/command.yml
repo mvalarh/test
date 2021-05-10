@@ -17,7 +17,18 @@ jobs:
           permission-level: admin
       - name: Act on the command
         run: echo "The command was '${{ steps.command.outputs.command-name }}' with arguments '${{ steps.command.outputs.command-arguments }}'"
+
+      - uses: mshick/add-pr-comment@v1
+        if: ${{ steps.command.outputs.command-name == 'merge' }} && ${{ steps.command.outputs.command-arguments == 'ready' }} 
+        with:
+          message: |
+            Mainainer can run '/merge' now.
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
+          allow-repeats: true # This is the default
+
       - name: automerge
+        if: ${{ steps.command.outputs.command-name == 'merge' }} && ${{ steps.command.outputs.command-arguments == '' }} 
         uses: "pascalgn/automerge-action@v0.13.1"
         env:
           GITHUB_TOKEN: "${{ secrets.MERGE }}"

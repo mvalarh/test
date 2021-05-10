@@ -47,7 +47,7 @@ jobs:
               issue_number: ${{ steps.author.outputs.pr }},
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '/merge'
+              body: '/merge ready'
             })
 
       # - uses: mshick/add-pr-comment@v1
