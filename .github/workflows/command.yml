@@ -38,8 +38,8 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo
             })
-            console.log(labels)
-            return labels
+            console.log(labels.data)
+            return labels.data
           # result-encoding: string
       - name: Get result
         env:
