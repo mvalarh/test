@@ -49,6 +49,16 @@ jobs:
       - name: Get result
         run: echo "${{steps.set-result.outputs.result}}"
 
+      - name: Get result
+        if: |
+          (contains(steps.set-result.outputs.result.*.name, 'allow/test-in-draft-mode'))
+        run: echo "${{steps.set-result.outputs.result}}"
+
+      - name: Get result not found
+        if: |
+          (contains(steps.set-result.outputs.result.*.name, 'zzzz'))
+        run: echo "${{steps.set-result.outputs.result}}"
+
 
       # - name: Labels
       #   id: pr-labels
