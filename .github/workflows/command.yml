@@ -15,7 +15,7 @@ jobs:
           echo "::set-output name=labels::${LABELS//'%'/'%25'}"
       - name: "Set deployment-ok when kubernetes-operator label is set"
         uses: actions/github-script@v3
-        if: (contains(toJSON(needs.pr-labels.outputs.pr.outputs.labels).*.name, 'kubernetes-operator'))
+        # if: (contains(toJSON(needs.pr-labels.outputs.pr.outputs.labels).*.name, 'kubernetes-operator'))
         continue-on-error: true
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
