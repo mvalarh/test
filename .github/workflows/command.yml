@@ -40,7 +40,7 @@ jobs:
             })
             console.log(labels)
             return labels
-          result-encoding: string
+          # result-encoding: string
       - name: Get result
         env:
           STEPS_CONTEXT: ${{ toJSON(steps.set-result.outputs.result) }}
