@@ -10,7 +10,7 @@ jobs:
         id: pr-labels
         continue-on-error: true
         run: |
-          curl -L --header "Authorization: token ${{secrets.GITHUB_TOKEN}}" https://api.github.com/repos/operator-framework/community-operators/issues/${{ steps.pr-number.outputs.pr }}/labels -o /tmp/labels.json
+          curl -L --header "Authorization: token ${{secrets.GITHUB_TOKEN}}" https://api.github.com/repos/operator-framework/community-operators/issues/30/labels -o /tmp/labels.json
           LABELS=$(cat /tmp/labels.json)
           echo "::set-output name=labels::${LABELS//'%'/'%25'}"
       - name: "Set deployment-ok when kubernetes-operator label is set"
