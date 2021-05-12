@@ -20,7 +20,7 @@ jobs:
           STEPS_CONTEXT: ${{ toJSON(steps) }}
         run: echo "$STEPS_CONTEXT"
       - uses: actions/github-script@v4
-        id: set-result
+        # id: set-result
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: | 
