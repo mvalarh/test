@@ -51,7 +51,7 @@ jobs:
 
       - name: Get result
         if: |
-          (contains(steps.set-result.outputs.result.*.name, 'allow/test-in-draft-mode'))
+          (contains(toJSON(steps.set-result.outputs.result).*.name, 'allow/test-in-draft-mode'))
         run: echo "${{steps.set-result.outputs.result}}"
 
       - name: Get result not found
