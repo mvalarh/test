@@ -5,48 +5,66 @@ jobs:
     name: Check comments for /test
     runs-on: ubuntu-latest
     steps:
-      - name: Check for Command
-        id: command
-        uses: xt0rted/slash-command-action@v1
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          command: merge
-          reaction: "true"
-          reaction-type: "eyes"
-          allow-edits: "false"
-          permission-level: admin
-      - name: Act on the command ('')
-        if: steps.command.outputs.command-name == 'merge' && steps.command.outputs.command-arguments == ''
-        run: echo "The command was '${{ steps.command.outputs.command-name }}' with arguments '${{ steps.command.outputs.command-arguments }}'"
-      - name: Act on the command ('ready')
-        if: steps.command.outputs.command-name == 'merge' && steps.command.outputs.command-arguments == 'ready'
-        run: echo "The command was '${{ steps.command.outputs.command-name }}' with arguments '${{ steps.command.outputs.command-arguments }}'"
-      - uses: actions/github-script@v3
-        if: steps.command.outputs.command-name == 'merge' && steps.command.outputs.command-arguments == 'ready'
+
+      - name: Labels
+        id: pr-labels
+        continue-on-error: true
+        run: |
+          curl -L --header "Authorization: token ${{secrets.GITHUB_TOKEN}}" https://api.github.com/repos/operator-framework/community-operators/issues/${{ steps.pr-number.outputs.pr }}/labels -o /tmp/labels.json
+          LABELS=$(cat /tmp/labels.json)
+          echo "::set-output name=labels::${LABELS//'%'/'%25'}"
+      - name: "Set deployment-ok when kubernetes-operator label is set"
+        uses: actions/github-script@v3
+        if: (contains(toJSON(needs.pr-labels.outputs.pr.outputs.labels).*.name, 'kubernetes-operator'))
+        continue-on-error: true
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: 'Mainainer can merge now'
-            })
+            console.log(needs.pr-labels.outputs.pr.outputs.labels)
+            console.log(toJSON(needs.pr-labels.outputs.pr.outputs.labels))
+            console.log(contains(toJSON(needs.pr-labels.outputs.pr.outputs.labels).*.name, 'kubernetes-operator'))
+      # - name: Check for Command
+      #   id: command
+      #   uses: xt0rted/slash-command-action@v1
+      #   with:
+      #     repo-token: ${{ secrets.GITHUB_TOKEN }}
+      #     command: merge
+      #     reaction: "true"
+      #     reaction-type: "eyes"
+      #     allow-edits: "false"
+      #     permission-level: admin
+      # - name: Act on the command ('')
+      #   if: steps.command.outputs.command-name == 'merge' && steps.command.outputs.command-arguments == ''
+      #   run: echo "The command was '${{ steps.command.outputs.command-name }}' with arguments '${{ steps.command.outputs.command-arguments }}'"
+      # - name: Act on the command ('ready')
+      #   if: steps.command.outputs.command-name == 'merge' && steps.command.outputs.command-arguments == 'ready'
+      #   run: echo "The command was '${{ steps.command.outputs.command-name }}' with arguments '${{ steps.command.outputs.command-arguments }}'"
+      # - uses: actions/github-script@v3
+      #   if: steps.command.outputs.command-name == 'merge' && steps.command.outputs.command-arguments == 'ready'
+      #   with:
+      #     github-token: ${{secrets.GITHUB_TOKEN}}
+      #     script: |
+      #       github.issues.createComment({
+      #         issue_number: context.issue.number,
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         body: 'Mainainer can merge now'
+      #       })
 
-      - name: automerge
-        if: steps.command.outputs.command-name == 'merge' && steps.command.outputs.command-arguments == ''
-        uses: "pascalgn/automerge-action@v0.13.1"
-        env:
-          GITHUB_TOKEN: "${{ secrets.MERGE }}"
-          MERGE_LABELS: "Triage,!work in progress"
-          MERGE_REMOVE_LABELS: "Triage"
-          MERGE_METHOD: "merge"
-          MERGE_COMMIT_MESSAGE: "pull-request-title"
-          MERGE_FORKS: "true"
-          MERGE_RETRIES: "6"
-          MERGE_RETRY_SLEEP: "10000"
-          UPDATE_LABELS: ""
-          UPDATE_METHOD: "rebase"
+      # - name: automerge
+      #   if: steps.command.outputs.command-name == 'merge' && steps.command.outputs.command-arguments == ''
+      #   uses: "pascalgn/automerge-action@v0.13.1"
+      #   env:
+      #     GITHUB_TOKEN: "${{ secrets.MERGE }}"
+      #     MERGE_LABELS: "Triage,!work in progress"
+      #     MERGE_REMOVE_LABELS: "Triage"
+      #     MERGE_METHOD: "merge"
+      #     MERGE_COMMIT_MESSAGE: "pull-request-title"
+      #     MERGE_FORKS: "true"
+      #     MERGE_RETRIES: "6"
+      #     MERGE_RETRY_SLEEP: "10000"
+      #     UPDATE_LABELS: ""
+      #     UPDATE_METHOD: "rebase"
       # - name: Merge
       #   if: steps.command.outputs.command-name == 'merge' && steps.command.outputs.command-arguments == ''
       #   uses: actions/github-script@v3
