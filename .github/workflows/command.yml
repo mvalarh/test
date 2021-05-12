@@ -56,7 +56,7 @@ jobs:
 
       - name: Get result not found
         if: |
-          (contains(steps.set-result.outputs.result.*.name, 'zzzz'))
+          (contains(fromJSON(steps.set-result.outputs.result).*.name, 'zzzz'))
         run: echo "${{steps.set-result.outputs.result}}"
 
 
