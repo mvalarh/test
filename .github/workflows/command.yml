@@ -51,13 +51,11 @@ jobs:
       #   run: echo "${{steps.set-result.outputs.result}}"
 
       - name: Get result
-        if: |
-          (contains(fromJSON(steps.set-result.outputs.result).*.name, 'allow/test-in-draft-mode'))
+        if: contains(fromJSON(steps.set-result.outputs.result).*.name, 'allow/test-in-draft-mode')
         run: echo "sdfds"
 
       - name: Get result not found
-        if: |
-          (contains(fromJSON(steps.set-result.outputs.result).*.name, 'zzzz'))
+        if: contains(fromJSON(steps.set-result.outputs.result).*.name, 'zzzz')
         run: echo "dfds"
 
 
