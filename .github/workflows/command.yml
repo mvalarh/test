@@ -45,7 +45,9 @@ jobs:
         env:
           STEPS_CONTEXT: ${{ toJSON(steps.set-result.outputs.result) }}
         run: echo "$STEPS_CONTEXT"
-        # run: echo "${{steps.set-result.outputs.result}}"
+
+      - name: Get result
+        run: echo "${{steps.set-result.outputs.result}}"
 
 
       # - name: Labels
