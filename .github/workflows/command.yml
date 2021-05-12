@@ -6,23 +6,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Labels
-        id: pr-labels
-        continue-on-error: true
-        run: |
-          curl -L --header "Authorization: token ${{secrets.GITHUB_TOKEN}}" https://api.github.com/repos/operator-framework/community-operators/issues/${{ github.event.issue.number }}/labels -o /tmp/labels.json
-          LABELS=$(cat /tmp/labels.json)
-          echo "::set-output name=labels::${LABELS//'%'/'%25'}"
-      - name: "Set deployment-ok when kubernetes-operator label is set"
-        uses: actions/github-script@v3
-        # if: (contains(toJSON(needs.pr-labels.outputs.pr.outputs.labels).*.name, 'kubernetes-operator'))
-        continue-on-error: true
+      - uses: actions/github-script@v4
+        id: set-result
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            console.log(needs.pr-labels.outputs.pr.outputs.labels)
-            console.log(toJSON(needs.pr-labels.outputs.pr.outputs.labels))
-            console.log(contains(toJSON(needs.pr-labels.outputs.pr.outputs.labels).*.name, 'kubernetes-operator'))
+          script: return github.issues.addLabels({
+              issue_number: github.event.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo
+            })
+          result-encoding: string
+      - name: Get result
+        run: echo "${{steps.set-result.outputs.result}}"
+
+
+      # - name: Labels
+      #   id: pr-labels
+      #   continue-on-error: true
+      #   run: |
+      #     curl -L --header "Authorization: token ${{secrets.GITHUB_TOKEN}}" https://api.github.com/repos/operator-framework/community-operators/issues/${{ github.event.issue.number }}/labels -o /tmp/labels.json
+      #     LABELS=$(cat /tmp/labels.json)
+      #     echo "::set-output name=labels::${LABELS//'%'/'%25'}"
+      # - name: "Set deployment-ok when kubernetes-operator label is set"
+      #   uses: actions/github-script@v3
+      #   # if: (contains(toJSON(needs.pr-labels.outputs.pr.outputs.labels).*.name, 'kubernetes-operator'))
+      #   continue-on-error: true
+      #   with:
+      #     github-token: ${{secrets.GITHUB_TOKEN}}
+      #     script: |
+      #       console.log(needs.pr-labels.outputs.pr.outputs.labels)
+      #       console.log(toJSON(needs.pr-labels.outputs.pr.outputs.labels))
+      #       console.log(contains(toJSON(needs.pr-labels.outputs.pr.outputs.labels).*.name, 'kubernetes-operator'))
       # - name: Check for Command
       #   id: command
       #   uses: xt0rted/slash-command-action@v1
