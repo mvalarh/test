@@ -53,12 +53,12 @@ jobs:
       - name: Get result
         if: |
           (contains(fromJSON(steps.set-result.outputs.result).*.name, 'allow/test-in-draft-mode'))
-        run: echo "${{steps.set-result.outputs.result}}"
+        run: echo "sdfds"
 
       - name: Get result not found
         if: |
           (contains(fromJSON(steps.set-result.outputs.result).*.name, 'zzzz'))
-        run: echo "${{steps.set-result.outputs.result}}"
+        run: echo "dfds"
 
 
       # - name: Labels
