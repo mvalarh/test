@@ -31,4 +31,6 @@ jobs:
           echo "::set-output name=op_test_name::aqua"
           echo "OP_PR=${{ github.event.pull_request.number }}"
           
+github.event.pull_request.labels
+
 
