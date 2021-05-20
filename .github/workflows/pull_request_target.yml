@@ -13,10 +13,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    if: github.event.action == 'labeled' && github.event.label.name == 'bug'
     steps:
       # - name: Checkout code
       #   uses: actions/checkout@v2
-
       - name: Author
         id: author
         run: |
