@@ -24,6 +24,14 @@ jobs:
           echo "github.event.pull_request.user.login: ${{ github.event.pull_request.user.login }}"
           echo "github.event.pull_request.state: ${{ github.event.pull_request.state }}"
 
+      - name: "Info"
+        uses: actions/github-script@v3
+        continue-on-error: true
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            connsole.log(context)
+            
       # - name: Assign pull requests to Community Operator Submissions project
       #   uses: srggrs/assign-one-project-github-action@1.2.1
       #   if: github.event.action == 'opened' || github.event.action == 'reopened'
