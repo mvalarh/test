@@ -15,8 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.review.state == 'approved'
     steps:
-      # - name: Checkout code
-      #   uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Author
         id: author
         run: |
@@ -26,4 +26,5 @@ jobs:
           echo "github.event.action: ${{ github.event.action }}"
           echo "github.event.review.state: ${{ github.event.review.state }}"
           echo "github.event.review.user.login: ${{ github.event.review.user.login }}"
+          ls -al
       
